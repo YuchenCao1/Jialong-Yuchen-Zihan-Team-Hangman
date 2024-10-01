@@ -2,20 +2,18 @@ package com.example.hangmangame
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.widget.Button
-import android.widget.GridLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.ComponentActivity
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var wordToGuess: String
     private lateinit var wordDisplay: TextView
-    private lateinit var hangmanView: HangmanView
+    private lateinit var hangmanView: ImageView
     private lateinit var letterButtons: GridLayout
     private var guessedLetters = mutableSetOf<Char>()
     private var remainingTurns = 6
+    private var wrongGuesses = 6 - remainingTurns
     private var hintClickCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +45,7 @@ class MainActivity : ComponentActivity() {
         remainingTurns = 6
         hintClickCount = 0
         updateWordDisplay()
-        hangmanView.updateWrongGuesses(0)
+        wrongGuesses = 0
 
         for (i in 0 until letterButtons.childCount) {
             val button = letterButtons.getChildAt(i) as? Button
@@ -80,10 +78,15 @@ class MainActivity : ComponentActivity() {
 
         if (!wordToGuess.contains(letter)) {
             remainingTurns--
-            hangmanView.updateWrongGuesses(6 - remainingTurns)
+            updateHangmanImage()
         }
 
         checkGameOver()
+    }
+
+    private fun updateHangmanImage() {
+        val resId = resources.getIdentifier("hangman$wrongGuesses", "drawable", packageName)
+        hangmanView.setImageResource(resId)
     }
 
     private fun updateWordDisplay() {
@@ -142,7 +145,7 @@ class MainActivity : ComponentActivity() {
                     val lettersToDisable = incorrectLetters.shuffled().take((incorrectLetters.size + 1) / 2)
                     lettersToDisable.forEach { disableLetterButton(it) }
                     remainingTurns--
-                    hangmanView.updateWrongGuesses(6 - remainingTurns)
+                    wrongGuesses = 6 - remainingTurns
                     Toast.makeText(this, "Hint: Disabled some incorrect letters", Toast.LENGTH_SHORT).show()
                     hintClickCount++
                     checkGameOver()
@@ -167,7 +170,7 @@ class MainActivity : ComponentActivity() {
                     updateWordDisplay()
                     vowels.forEach { disableLetterButton(it) }
                     remainingTurns--
-                    hangmanView.updateWrongGuesses(6 - remainingTurns)
+                    wrongGuesses = 6 - remainingTurns
                     Toast.makeText(this, "Hint: Revealed all vowels", Toast.LENGTH_SHORT).show()
                     hintClickCount++
                     checkGameOver()

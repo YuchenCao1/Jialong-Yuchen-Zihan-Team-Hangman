@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:baselineAligned="false"
     android:orientation="horizontal"
     android:padding="8dp">
 
@@ -22,17 +23,18 @@
             android:useDefaultMargins="true">
         </GridLayout>
     </ScrollView>
+
     <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="10dp"
+        android:layout_height="365dp"
         android:layout_weight="2"
         android:padding="3dp">
 
-        <com.example.hangmangame.HangmanView
+        <ImageView
             android:id="@+id/hangmanView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="8dp" />
+            android:layout_width="210dp"
+            android:layout_height="395dp"
+            android:src="@drawable/hangman0" />
     </FrameLayout>
 
     <LinearLayout
@@ -45,11 +47,11 @@
 
         <TextView
             android:id="@+id/wordTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
             android:gravity="center"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:textSize="28sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
