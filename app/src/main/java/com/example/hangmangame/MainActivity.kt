@@ -358,14 +358,14 @@ fun getRandomWord(): String {
 
 
 fun getHangmanImageResource(wrongGuesses: Int): Int {
-    return when (wrongGuesses) {
-        0 -> R.drawable.hangman0
-        1 -> R.drawable.hangman1
-        2 -> R.drawable.hangman2
-        3 -> R.drawable.hangman3
-        4 -> R.drawable.hangman4
-        5 -> R.drawable.hangman5
-        else -> R.drawable.hangman6
+    when (wrongGuesses) {
+        0 -> return R.drawable.hangman0
+        1 -> return R.drawable.hangman1
+        2 -> return R.drawable.hangman2
+        3 -> return R.drawable.hangman3
+        4 -> return R.drawable.hangman4
+        5 -> return R.drawable.hangman5
+        else -> return R.drawable.hangman6
     }
 }
 
@@ -400,31 +400,31 @@ fun showHint(
         "WATER" to "ELEMENT"
     )
 
-    return when (hintClickCount) {
+    when (hintClickCount) {
         0 -> {
-            wordHints[wordToGuess] ?: ""
+            return wordHints[wordToGuess] ?: ""
         }
         1 -> {
             if (remainingTurns <= 1) {
                 Toast.makeText(context, "Hint not available", Toast.LENGTH_SHORT).show()
-                wordHints[wordToGuess] ?: ""
+                return wordHints[wordToGuess] ?: ""
             } else {
                 val incorrectLetters = ('A'..'Z').filter { it !in wordToGuess && it !in guessedLetters }
                 if (incorrectLetters.isNotEmpty()) {
                     val lettersToDisable = incorrectLetters.shuffled().take((incorrectLetters.size + 1) / 2).toSet()
                     onLettersDisabled(lettersToDisable)
                     Toast.makeText(context, "Hint: Disabled some incorrect letters", Toast.LENGTH_SHORT).show()
-                    wordHints[wordToGuess] ?: ""
+                    return wordHints[wordToGuess] ?: ""
                 } else {
                     Toast.makeText(context, "No letters to disable", Toast.LENGTH_SHORT).show()
-                    wordHints[wordToGuess] ?: ""
+                    return wordHints[wordToGuess] ?: ""
                 }
             }
         }
         2 -> {
             if (remainingTurns <= 1) {
                 Toast.makeText(context, "Hint not available", Toast.LENGTH_SHORT).show()
-                wordHints[wordToGuess] ?: ""
+                return wordHints[wordToGuess] ?: ""
             } else {
                 val vowels = listOf('A', 'E', 'I', 'O', 'U')
                 val lettersToDisable = vowels.shuffled().toSet()
@@ -434,16 +434,16 @@ fun showHint(
                 if (vowelsInWord.isNotEmpty()) {
                     onLettersDisabled(vowelsInWord.toSet())
                     Toast.makeText(context, "Hint: Revealed all vowels", Toast.LENGTH_SHORT).show()
-                    wordHints[wordToGuess] ?: ""
+                    return wordHints[wordToGuess] ?: ""
                 } else {
                     Toast.makeText(context, "No unrevealed vowels", Toast.LENGTH_SHORT).show()
-                    wordHints[wordToGuess] ?: ""
+                    return wordHints[wordToGuess] ?: ""
                 }
             }
         }
         else -> {
             Toast.makeText(context, "No more hints available", Toast.LENGTH_SHORT).show()
-            wordHints[wordToGuess] ?: ""
+            return wordHints[wordToGuess] ?: ""
         }
     }
 }
