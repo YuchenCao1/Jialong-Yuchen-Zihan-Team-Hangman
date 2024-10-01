@@ -347,10 +347,7 @@ fun getWordDisplay(wordToGuess: String, guessedLetters: Set<Char>): String {
 
 fun getRandomWord(): String {
     val wordList = listOf(
-        "CAT", "DOG", "SKY", "HELLO", "APPLE", "HOUSE",
-        "LION", "BIRD", "TREE", "FISH", "BOOK", "STAR",
-        "MOON", "SUN", "RAIN", "WIND", "FIRE", "ICE",
-        "EARTH", "WATER"
+        "CAT"
     )
     val randomIndex = (Math.random() * wordList.size).toInt()
     return wordList[randomIndex]
@@ -428,11 +425,10 @@ fun showHint(
             } else {
                 val vowels = listOf('A', 'E', 'I', 'O', 'U')
                 val lettersToDisable = vowels.shuffled().toSet()
-                onLettersDisabled(lettersToDisable)
 
                 val vowelsInWord = vowels.filter { it in wordToGuess && it !in guessedLetters }
                 if (vowelsInWord.isNotEmpty()) {
-                    onLettersDisabled(vowelsInWord.toSet())
+                    onLettersDisabled(lettersToDisable)
                     Toast.makeText(context, "Hint: Revealed all vowels", Toast.LENGTH_SHORT).show()
                     return wordHints[wordToGuess] ?: ""
                 } else {
