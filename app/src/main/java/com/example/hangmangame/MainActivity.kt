@@ -41,9 +41,9 @@ fun HangmanGameScreen() {
 
     var wordToGuess by remember { mutableStateOf(getRandomWord().uppercase()) }
     var guessedLetters by remember { mutableStateOf(setOf<Char>()) }
-    var remainingTurns by remember { mutableStateOf(6) }
-    var wrongGuesses by remember { mutableStateOf(0) }
-    var hintClickCount by remember { mutableStateOf(0) }
+    var remainingTurns by remember { mutableIntStateOf(6) }
+    var wrongGuesses by remember { mutableIntStateOf(0) }
+    var hintClickCount by remember { mutableIntStateOf(0) }
     var hintText by remember { mutableStateOf("") }
     var gameOverMessage by remember { mutableStateOf<String?>(null) }
 
@@ -122,6 +122,7 @@ fun HangmanGameScreen() {
             },
             onShowHint = {
                 hintText = showHint(
+                    context,
                     wordToGuess,
                     guessedLetters,
                     remainingTurns,
@@ -369,6 +370,7 @@ fun getHangmanImageResource(wrongGuesses: Int): Int {
 }
 
 fun showHint(
+    context: android.content.Context,
     wordToGuess: String,
     guessedLetters: Set<Char>,
     remainingTurns: Int,
@@ -404,35 +406,40 @@ fun showHint(
         }
         1 -> {
             if (remainingTurns <= 1) {
-                "Hint not available"
+                Toast.makeText(context, "Hint not available", Toast.LENGTH_SHORT).show()
+                wordHints[wordToGuess] ?: ""
             } else {
                 val incorrectLetters = ('A'..'Z').filter { it !in wordToGuess && it !in guessedLetters }
                 if (incorrectLetters.isNotEmpty()) {
                     val lettersToDisable = incorrectLetters.shuffled().take((incorrectLetters.size + 1) / 2).toSet()
                     onLettersDisabled(lettersToDisable)
+                    Toast.makeText(context, "Hint: Disabled some incorrect letters", Toast.LENGTH_SHORT).show()
                     wordHints[wordToGuess] ?: ""
                 } else {
-                    "No letters to disable"
+                    Toast.makeText(context, "No letters to disable", Toast.LENGTH_SHORT).show()
+                    wordHints[wordToGuess] ?: ""
                 }
             }
         }
         2 -> {
             if (remainingTurns <= 1) {
-                "Hint not available"
+                Toast.makeText(context, "Hint not available", Toast.LENGTH_SHORT).show()
+                wordHints[wordToGuess] ?: ""
             } else {
                 val vowels = listOf('A', 'E', 'I', 'O', 'U')
-                val lettersToDisable = vowels.shuffled().toSet()
                 val vowelsInWord = vowels.filter { it in wordToGuess && it !in guessedLetters }
-                onLettersDisabled(lettersToDisable)
                 if (vowelsInWord.isNotEmpty()) {
                     onLettersDisabled(vowelsInWord.toSet())
+                    Toast.makeText(context, "Hint: Revealed all vowels", Toast.LENGTH_SHORT).show()
                     wordHints[wordToGuess] ?: ""
                 } else {
-                    "No unrevealed vowels"
+                    Toast.makeText(context, "No unrevealed vowels", Toast.LENGTH_SHORT).show()
+                    wordHints[wordToGuess] ?: ""
                 }
             }
         }
         else -> {
+            Toast.makeText(context, "No more hints available", Toast.LENGTH_SHORT).show()
             wordHints[wordToGuess] ?: ""
         }
     }
