@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var letterButtons: GridLayout
     private var guessedLetters = mutableSetOf<Char>()
     private var remainingTurns = 6
-    private var wrongGuesses = 6 - remainingTurns
+    private var wrongGuesses = 0
     private var hintClickCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +78,7 @@ class MainActivity : ComponentActivity() {
 
         if (!wordToGuess.contains(letter)) {
             remainingTurns--
+            wrongGuesses = 6 - remainingTurns
             updateHangmanImage()
         }
 
@@ -146,6 +147,7 @@ class MainActivity : ComponentActivity() {
                     lettersToDisable.forEach { disableLetterButton(it) }
                     remainingTurns--
                     wrongGuesses = 6 - remainingTurns
+                    updateHangmanImage()
                     Toast.makeText(this, "Hint: Disabled some incorrect letters", Toast.LENGTH_SHORT).show()
                     hintClickCount++
                     checkGameOver()
@@ -171,6 +173,7 @@ class MainActivity : ComponentActivity() {
                     vowels.forEach { disableLetterButton(it) }
                     remainingTurns--
                     wrongGuesses = 6 - remainingTurns
+                    updateHangmanImage()
                     Toast.makeText(this, "Hint: Revealed all vowels", Toast.LENGTH_SHORT).show()
                     hintClickCount++
                     checkGameOver()
