@@ -45,9 +45,11 @@ class MainActivity : ComponentActivity() {
         wordToGuess = getRandomWord().uppercase()
         guessedLetters.clear()
         remainingTurns = 6
+        wrongGuesses = 0
+        updateHangmanImage()
         hintClickCount = 0
         updateWordDisplay()
-        wrongGuesses = 0
+
 
         for (i in 0 until letterButtons.childCount) {
             val button = letterButtons.getChildAt(i) as? Button
