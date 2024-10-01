@@ -10,7 +10,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
+        android:layout_weight="5"
         android:paddingEnd="8dp">
 
         <GridLayout
@@ -27,7 +27,7 @@
     <FrameLayout
         android:layout_width="10dp"
         android:layout_height="365dp"
-        android:layout_weight="2"
+        android:layout_weight="4"
         android:padding="3dp">
 
         <ImageView
@@ -40,14 +40,14 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:orientation="vertical"
         android:gravity="center"
         android:paddingStart="3dp">
 
         <TextView
             android:id="@+id/wordTextView"
-            android:layout_width="86dp"
+            android:layout_width="156dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="8dp"
