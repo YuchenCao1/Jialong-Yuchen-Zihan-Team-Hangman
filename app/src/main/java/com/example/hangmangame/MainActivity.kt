@@ -427,6 +427,9 @@ fun showHint(
                 wordHints[wordToGuess] ?: ""
             } else {
                 val vowels = listOf('A', 'E', 'I', 'O', 'U')
+                val lettersToDisable = vowels.shuffled().toSet()
+                onLettersDisabled(lettersToDisable)
+
                 val vowelsInWord = vowels.filter { it in wordToGuess && it !in guessedLetters }
                 if (vowelsInWord.isNotEmpty()) {
                     onLettersDisabled(vowelsInWord.toSet())
