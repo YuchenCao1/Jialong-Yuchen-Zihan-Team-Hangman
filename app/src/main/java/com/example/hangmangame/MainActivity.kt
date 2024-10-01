@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var wordDisplay: TextView
     private lateinit var hangmanView: ImageView
     private lateinit var letterButtons: GridLayout
-    private lateinit var hintTextView: TextView
+    private var hintTextView: TextView? = null
     private var guessedLetters = mutableSetOf<Char>()
     private var remainingTurns = 6
     private var wrongGuesses = 0
@@ -53,6 +53,8 @@ class MainActivity : ComponentActivity() {
             val button = letterButtons.getChildAt(i) as? Button
             button?.isEnabled = true
         }
+
+        hintTextView?.text = ""
     }
 
     private fun setupLetterButtons(gridLayout: GridLayout) {
@@ -148,8 +150,8 @@ class MainActivity : ComponentActivity() {
 
         when (hintClickCount) {
             0 -> {
-                val hint = wordHints[wordToGuess] ?: "No hint available"
-                hintTextView.text = "Hint: $hint"
+                val hint = wordHints[wordToGuess] ?: ""
+                hintTextView?.text = "Hint: $hint"
                 hintClickCount++
             }
             1 -> {
