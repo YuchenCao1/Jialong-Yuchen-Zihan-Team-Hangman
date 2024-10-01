@@ -3,7 +3,9 @@ package com.example.hangmangame
 import android.app.AlertDialog
 import android.os.Bundle
 import android.widget.*
+import androidx.gridlayout.widget.GridLayout
 import androidx.activity.ComponentActivity
+
 
 class MainActivity : ComponentActivity() {
 
@@ -19,18 +21,26 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Set the content view
         setContentView(R.layout.activity_main)
 
+        // Initialize views
         wordDisplay = findViewById(R.id.wordTextView)
         hangmanView = findViewById(R.id.hangmanView)
         val newGameButton: Button = findViewById(R.id.newGameButton)
         letterButtons = findViewById(R.id.letterButtons)
         hintTextView = findViewById(R.id.hintTextView)
-
         val hintButton: Button? = findViewById(R.id.hintButton)
 
-        setupNewGame()
         setupLetterButtons(letterButtons)
+
+        if (savedInstanceState == null) {
+            // First launch, start a new game
+            setupNewGame()
+        } else {
+            // Restore the game state
+            restoreGameState(savedInstanceState)
+        }
 
         newGameButton.setOnClickListener {
             setupNewGame()
@@ -46,10 +56,9 @@ class MainActivity : ComponentActivity() {
         guessedLetters.clear()
         remainingTurns = 6
         wrongGuesses = 0
-        updateHangmanImage()
         hintClickCount = 0
+        updateHangmanImage()
         updateWordDisplay()
-
 
         for (i in 0 until letterButtons.childCount) {
             val button = letterButtons.getChildAt(i) as? Button
@@ -216,5 +225,56 @@ class MainActivity : ComponentActivity() {
                 break
             }
         }
+    }
+
+    /*** Updated methods for saving and restoring state ***/
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("WORD_TO_GUESS", wordToGuess)
+        outState.putStringArrayList("GUESSED_LETTERS", ArrayList(guessedLetters.map { it.toString() }))
+        outState.putInt("REMAINING_TURNS", remainingTurns)
+        outState.putInt("WRONG_GUESSES", wrongGuesses)
+        outState.putInt("HINT_CLICK_COUNT", hintClickCount)
+        outState.putString("WORD_DISPLAY_TEXT", wordDisplay.text.toString())
+        outState.putString("HINT_TEXT", hintTextView?.text.toString())
+
+        // Save disabled letter buttons
+        val disabledLetters = mutableListOf<String>()
+        for (i in 0 until letterButtons.childCount) {
+            val button = letterButtons.getChildAt(i) as? Button
+            if (button != null && !button.isEnabled) {
+                disabledLetters.add(button.text.toString())
+            }
+        }
+        outState.putStringArrayList("DISABLED_LETTERS", ArrayList(disabledLetters))
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        restoreGameState(savedInstanceState)
+    }
+
+    private fun restoreGameState(savedInstanceState: Bundle) {
+        wordToGuess = savedInstanceState.getString("WORD_TO_GUESS", "").uppercase()
+        val guessedLettersList = savedInstanceState.getStringArrayList("GUESSED_LETTERS") ?: arrayListOf()
+        guessedLetters = guessedLettersList.map { it.first() }.toMutableSet()
+        remainingTurns = savedInstanceState.getInt("REMAINING_TURNS", 6)
+        wrongGuesses = savedInstanceState.getInt("WRONG_GUESSES", 0)
+        hintClickCount = savedInstanceState.getInt("HINT_CLICK_COUNT", 0)
+        wordDisplay.text = savedInstanceState.getString("WORD_DISPLAY_TEXT", "")
+        hintTextView?.text = savedInstanceState.getString("HINT_TEXT", "")
+
+        // Restore disabled letter buttons
+        val disabledLettersList = savedInstanceState.getStringArrayList("DISABLED_LETTERS") ?: arrayListOf()
+        for (i in 0 until letterButtons.childCount) {
+            val button = letterButtons.getChildAt(i) as? Button
+            if (button != null) {
+                button.isEnabled = button.text.toString() !in disabledLettersList
+            }
+        }
+
+        updateHangmanImage()
+        updateWordDisplay()
     }
 }
