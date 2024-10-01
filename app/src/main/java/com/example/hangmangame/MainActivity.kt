@@ -11,6 +11,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var wordDisplay: TextView
     private lateinit var hangmanView: ImageView
     private lateinit var letterButtons: GridLayout
+    private lateinit var hintTextView: TextView
     private var guessedLetters = mutableSetOf<Char>()
     private var remainingTurns = 6
     private var wrongGuesses = 0
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
         hangmanView = findViewById(R.id.hangmanView)
         val newGameButton: Button = findViewById(R.id.newGameButton)
         letterButtons = findViewById(R.id.letterButtons)
+        hintTextView = findViewById(R.id.hintTextView)
 
         val hintButton: Button? = findViewById(R.id.hintButton)
 
@@ -121,18 +123,33 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showHint() {
+        val wordHints = mapOf(
+            "CAT" to "ANIMAL",
+            "DOG" to "ANIMAL",
+            "SKY" to "NATURE",
+            "HELLO" to "GREETING",
+            "APPLE" to "FOOD",
+            "HOUSE" to "BUILDING",
+            "LION" to "ANIMAL",
+            "BIRD" to "ANIMAL",
+            "TREE" to "NATURE",
+            "FISH" to "ANIMAL",
+            "BOOK" to "OBJECT",
+            "STAR" to "NATURE",
+            "MOON" to "NATURE",
+            "SUN" to "NATURE",
+            "RAIN" to "NATURE",
+            "WIND" to "NATURE",
+            "FIRE" to "ELEMENT",
+            "ICE" to "ELEMENT",
+            "EARTH" to "ELEMENT",
+            "WATER" to "ELEMENT"
+        )
+
         when (hintClickCount) {
             0 -> {
-                val unrevealedLetters = wordToGuess.filter { it !in guessedLetters }
-                if (unrevealedLetters.isNotEmpty()) {
-                    val hintLetter = unrevealedLetters.random()
-                    guessedLetters.add(hintLetter)
-                    updateWordDisplay()
-                    disableLetterButton(hintLetter)
-                    Toast.makeText(this, "Hint: Revealed the letter \"$hintLetter\"", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "No hints available", Toast.LENGTH_SHORT).show()
-                }
+                val hint = wordHints[wordToGuess] ?: "No hint available"
+                hintTextView.text = "Hint: $hint"
                 hintClickCount++
             }
             1 -> {

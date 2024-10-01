@@ -7,11 +7,21 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="5"
+        android:orientation="vertical"
         android:paddingEnd="8dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CHOOSE A LETTER"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="8dp"/>
 
         <GridLayout
             android:id="@+id/letterButtons"
@@ -22,7 +32,19 @@
             android:padding="3dp"
             android:useDefaultMargins="true">
         </GridLayout>
-    </ScrollView>
+
+        <TextView
+            android:id="@+id/hintTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:paddingTop="10dp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/black"/>
+
+
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="10dp"
